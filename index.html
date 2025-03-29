@@ -706,7 +706,7 @@
     border-radius: 20px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 992px) {
     .footer-content {
         grid-template-columns: repeat(2, 1fr);
@@ -740,7 +740,7 @@
     }
 }
 #messageModal {
-            display: none; /* Hidden by default */
+            display: none; 
             position: fixed; /* Stay in place */
             z-index: 1; /* Sit on top */
             left: 0;
@@ -791,12 +791,17 @@
       <section class="featured">
         <h3 class="typewriter">Hello, I am..</h3>
         <h1 class="typewriter">Mohan krishna Narra</h1>
-        <h5 class="typewriter">An Entry Level Engineer</h5>
+        <h5 class="typewriter">
+          A <span id="dynamic-role"></span>
+        </h5>
+        
       </section>
+      
     </div>
+   
     <div class="container2" id="AboutMe">
       <section class="myimage">
-        <img src="/static/Images/IMG_271.jpg" alt="img" />
+        <img src="./static/Images/IMG_271.jpg" alt="img" />
       </section>
       <section class="about">
         <h2>About Me.</h2>
@@ -925,7 +930,7 @@
                 compatibility.
               </p>
             </section>
-            <button type="submit">Click</button>
+            <button type="submit">In progress</button>
           </section>
           <section class="minibox">
             <img src="./static/Images/bank2.jpg" alt="mods" />
@@ -936,18 +941,17 @@
                 account creation, deposits, withdrawals, and balance inquiries
               </p>
             </section>
-            <button type="submit">Click</button>
+            <button type="button" onclick="window.open('https://github.com/Mikey786/BanKing_System.git', '_blank')">Click</button>
           </section>
           <section class="minibox">
             <img src="./static/Images/port.webp" alt="mods" />
             <h3>Portfolio.</h3>
             <section>
               <p>
-                Developed a comprehensive banking system in Java, featuring
-                account creation, deposits, withdrawals, and balance inquiries
+                Designed and developed a personal portfolio website to showcase skills, projects, and certifications. The website is user-friendly, and visually appealing.
               </p>
             </section>
-            <button type="submit">Click</button>
+            <button type="button" onclick="window.open('https://github.com/Mikey786/BanKing_System.git', '_blank')">Click</button>
           </section>
         </div>
       </div>
@@ -1056,10 +1060,12 @@
           <div class="footer-section" data-aos="fade-left">
               <h3>Connect With Us</h3>
               <div class="social-links">
-                  <a href="#" class="social-link" data-tooltip="Facebook"><i class="fab fa-facebook-f"></i></a>
+                  <a href="https://www.facebook.com/narra.mohankrishnq" class="social-link" data-tooltip="Facebook"><i class="fab fa-facebook-f"></i></a>
                   <a href="#" class="social-link" data-tooltip="Twitter"><i class="fab fa-twitter"></i></a>
-                  <a href="#" class="social-link" data-tooltip="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#" class="social-link" data-tooltip="Instagram"><i class="fab fa-instagram"></i></a>
+                  <a href="https://www.linkedin.com/in/mohan-46324r/" class="social-link" data-tooltip="LinkedIn" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-linkedin-in"></i>
+                  </a>
+                                    <a href="#" class="social-link" data-tooltip="Instagram"><i class="fab fa-instagram"></i></a>
               </div>
               <div class="newsletter">
                   <h4>Feedback</h4>
@@ -1120,11 +1126,15 @@
     button.addEventListener('click', () => {
       const moreText = button.previousElementSibling.querySelector('.more-text');
       if (moreText.style.display === 'none' || moreText.style.display === '') {
-        $(moreText).slideDown();
+        $(moreText).slideDown(() => {
+          moreText.style.display = 'block'; // Ensure it remains visible
+        });
         button.textContent = 'Show less';
       } else {
-        $(moreText).slideUp();
-        button.textContent = 'Know more';
+        $(moreText).slideUp(() => {
+          moreText.style.display = 'none'; // Explicitly hide the element
+          button.textContent = 'Know more';
+        });
       }
     });
   });
@@ -1204,6 +1214,73 @@
     // Add hover effect to social links
    
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const roles = [
+      "Software Developer",
+      "Full Stack Developer",
+      "Network/Security Operations Specialist"
+    ];
+    let currentIndex = 0;
+    const roleElement = document.getElementById("dynamic-role");
+
+    // Typewriter effect for "Hello, I am.." and "Mohan krishna Narra"
+    const typewriterElements = [
+      { element: document.querySelector(".typewriter:nth-child(1)"), text: "Hello, I am.." },
+      { element: document.querySelector(".typewriter:nth-child(2)"), text: "Mohan krishna Narra" }
+    ];
+
+    function typeText(element, text, callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+        element.textContent = text.substring(0, i + 1);
+        i++;
+        if (i === text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, 25); // Typing speed for 2.5 seconds
+    }
+
+    function typeRoleText(text, callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+        roleElement.textContent = text.substring(0, i + 1);
+        i++;
+        if (i === text.length) {
+          clearInterval(interval);
+          setTimeout(callback, 1000); // Pause before deleting
+        }
+      }, 50); // Typing speed for roles
+    }
+
+    function deleteRoleText(callback) {
+      let text = roleElement.textContent;
+      const interval = setInterval(() => {
+        text = text.substring(0, text.length - 1);
+        roleElement.textContent = text;
+        if (text.length === 0) {
+          clearInterval(interval);
+          callback();
+        }
+      }, 30); // Deleting speed for roles
+    }
+
+    function loopRoles() {
+      typeRoleText(roles[currentIndex], () => {
+        deleteRoleText(() => {
+          currentIndex = (currentIndex + 1) % roles.length;
+          loopRoles();
+        });
+      });
+    }
+
+    // Sequentially type "Hello, I am.." and "Mohan krishna Narra" before starting roles
+    typeText(typewriterElements[0].element, typewriterElements[0].text, () => {
+      typeText(typewriterElements[1].element, typewriterElements[1].text, () => {
+        loopRoles();
+      });
+    });
+  });
 </script>
 
 
